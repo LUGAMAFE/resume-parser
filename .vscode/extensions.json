@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "streetsidesoftware.code-spell-checker",
+    "naumovs.color-highlight",
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "visualstudioexptteam.vscodeintellicode",
+    "redhat.vscode-yaml"
+  ]
+}

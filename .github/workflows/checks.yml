@@ -1,0 +1,30 @@
+name: Lint and Format
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+# Cancel any previous workflow that is still running
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: volta-cli/action
+        uses: volta-cli/action@v4.0.0
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run prettier check
+        run: yarn prettier
+
+      - name: Run lint check
+        run: yarn lint
