@@ -55,7 +55,7 @@ const postPDF = async (req, res = response) => {
     const resumeData = {
       name: data.name.first,
       lastname: data.name.last,
-      birthYear: '',
+      birthYear: data.dateOfBirth ?? '',
       fullname: data.name.raw,
       email: data.emails[0],
       tel: data.phoneNumbers[0],
