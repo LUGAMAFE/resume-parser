@@ -7,20 +7,27 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const uploadDirPath = __dirname + '/uploads';
 
 const postPDF = async (req, res = response) => {
-  console.log('files', req.files); // the uploaded file object
-  const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
-  const file = req.files.pdf;
-  const collection = 'tbCdtqoT';
+  try {
+    const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
 
-  if (!fs.existsSync(uploadDirPath)) {
-    fs.mkdirSync(uploadDirPath, { recursive: true });
-  }
+    const file = req.files.pdf;
+    const collection = 'tbCdtqot';
 
-  const uploadPath = uploadDirPath + '/' + filename;
-  file.mv(uploadPath, async (err) => {
-    if (err) {
-      return res.status(500).send(err);
+    if (!fs.existsSync(uploadDirPath)) {
+      fs.mkdirSync(uploadDirPath, { recursive: true });
     }
+
+    const uploadPath = uploadDirPath + '/' + filename;
+
+    await new Promise((resolve, reject) => {
+      file.mv(uploadPath, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
 
     // Read the contents of the PDF file
     const fileData = fs.readFileSync(uploadPath);
@@ -41,14 +48,45 @@ const postPDF = async (req, res = response) => {
       data: formData,
     };
 
-    try {
-      const response = await axios.request(options);
-      console.log(response);
-      res.status(200).send(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    const response = await axios.request(options);
+
+    const { data } = response.data; // Assuming the response data contains the required fields
+    console.log('data', data);
+    const resumeData = {
+      name: data.name.first,
+      lastname: data.name.last,
+      fullname: data.name.raw,
+      email: data.emails[0],
+      tel: data.phoneNumbers[0],
+      location: data.location?.rawInput,
+      timezone: '',
+      seniority: '',
+      position: data.profession,
+      skills: data.skills.map(({ name }) => name),
+      github: '',
+      linkedin: data.linkedin,
+      education: {
+        grade: data.education[0]?.accreditation?.education,
+        institution: data.education[0]?.organization,
+      },
+      experience: data.workExperience.map((exp) => ({
+        jobTitle: exp.jobTitle,
+        company: exp.organization,
+        location: exp.location?.rawInput,
+        dates: exp.dates,
+        description: exp.jobDescription,
+      })),
+      totalYearExperience: data.totalYearsExperience,
+      certifications: data.certifications,
+      languages: data.languages,
+      softskills: '',
+    };
+
+    res.status(200).json({ msg: 'everything good', data: resumeData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
 };
 
 export { postPDF };
