@@ -10,7 +10,7 @@ const postPDF = async (req, res = response) => {
   console.log('files', req.files); // the uploaded file object
   const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
   const file = req.files.pdf;
-  const collection = 'HpJUaMOV';
+  const collection = 'tbCdtqoT';
 
   if (!fs.existsSync(uploadDirPath)) {
     fs.mkdirSync(uploadDirPath, { recursive: true });
@@ -36,7 +36,7 @@ const postPDF = async (req, res = response) => {
       headers: {
         accept: 'application/json',
         'content-type': 'multipart/form-data',
-        authorization: 'Bearer a857d388f7338e83bb46e4ef0362256873734a52',
+        authorization: 'Bearer 0ddd129aeb67880e789fbf55f34ef5532b5618aa',
       },
       data: formData,
     };
