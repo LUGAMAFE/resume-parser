@@ -11,7 +11,7 @@ const postPDF = async (req, res = response) => {
     const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
 
     const file = req.files.pdf;
-    const collection = 'tbCdtqot';
+    const collection = 'tbCdtqoT';
 
     if (!fs.existsSync(uploadDirPath)) {
       fs.mkdirSync(uploadDirPath, { recursive: true });
