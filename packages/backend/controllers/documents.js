@@ -55,6 +55,7 @@ const postPDF = async (req, res = response) => {
     const resumeData = {
       name: data.name.first,
       lastname: data.name.last,
+      birthYear: '',
       fullname: data.name.raw,
       email: data.emails[0],
       tel: data.phoneNumbers[0],
@@ -65,10 +66,10 @@ const postPDF = async (req, res = response) => {
       skills: data.skills.map(({ name }) => name),
       github: '',
       linkedin: data.linkedin,
-      education: {
-        grade: data.education[0]?.accreditation?.education,
-        institution: data.education[0]?.organization,
-      },
+      education: data.education.map((ed) => ({
+        grade: ed.accreditation?.education,
+        institution: ed.organization,
+      })),
       experience: data.workExperience.map((exp) => ({
         jobTitle: exp.jobTitle,
         company: exp.organization,
