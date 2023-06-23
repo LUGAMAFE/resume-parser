@@ -63,5 +63,5 @@ web_modules/
 .env.production.local
 .env.local
 packages/backend/controllers/uploads/miller_paezdelaossa.pdf
-
+packages/backend/controllers/uploads/
 packages/backend/controllers/uploads/Ruth_RivasGonzlez_714427876.pdf

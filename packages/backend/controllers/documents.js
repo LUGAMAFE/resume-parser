@@ -11,7 +11,7 @@ const postPDF = async (req, res = response) => {
     const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
 
     const file = req.files.pdf;
-    const collection = 'tbCdtqoT';
+    const collection = process.env.affinda_collection_id;
 
     if (!fs.existsSync(uploadDirPath)) {
       fs.mkdirSync(uploadDirPath, { recursive: true });
@@ -43,7 +43,7 @@ const postPDF = async (req, res = response) => {
       headers: {
         accept: 'application/json',
         'content-type': 'multipart/form-data',
-        authorization: 'Bearer 0ddd129aeb67880e789fbf55f34ef5532b5618aa',
+        authorization: 'Bearer ' + process.env.affinda_bearer_token,
       },
       data: formData,
     };
@@ -51,7 +51,7 @@ const postPDF = async (req, res = response) => {
     const response = await axios.request(options);
 
     const { data } = response.data; // Assuming the response data contains the required fields
-    console.log('data', data);
+    console.log('successfull connection with affinda');
     const resumeData = {
       name: data.name.first,
       lastname: data.name.last,
@@ -85,8 +85,10 @@ const postPDF = async (req, res = response) => {
 
     res.status(200).json({ msg: 'everything good', data: resumeData });
   } catch (error) {
+    console.clear();
+    console.log('Error------');
     console.error(error);
-    res.status(500).send('An error occurred');
+    res.status(500).json(error);
   }
 };
 
