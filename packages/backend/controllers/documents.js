@@ -5,13 +5,15 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const uploadDirPath = __dirname + '/uploads';
+const BEARER_TOKEN = process.env.affinda_bearer_token;
+const COLLECTION_ID = process.env.affinda_collection_id;
 
 const postPDF = async (req, res = response) => {
   try {
     const filename = req.files.pdf.name; // All files sent as pdf must be specified in the key value as pdf
 
     const file = req.files.pdf;
-    const collection = 'tbCdtqoT';
+    const collection = COLLECTION_ID;
 
     if (!fs.existsSync(uploadDirPath)) {
       fs.mkdirSync(uploadDirPath, { recursive: true });
@@ -43,7 +45,7 @@ const postPDF = async (req, res = response) => {
       headers: {
         accept: 'application/json',
         'content-type': 'multipart/form-data',
-        authorization: 'Bearer 0ddd129aeb67880e789fbf55f34ef5532b5618aa',
+        authorization: 'Bearer ' + BEARER_TOKEN,
       },
       data: formData,
     };
@@ -52,7 +54,9 @@ const postPDF = async (req, res = response) => {
 
     const { data } = response.data; // Assuming the response data contains the required fields
     console.log('data', data);
+    // console.log('typeofimg', typeof data.headShot);
     const resumeData = {
+      profilePicture: data.headShot,
       name: data.name.first,
       lastname: data.name.last,
       birthYear: data.dateOfBirth ?? '',
@@ -64,7 +68,7 @@ const postPDF = async (req, res = response) => {
       seniority: '',
       position: data.profession,
       skills: data.skills.map(({ name }) => name),
-      github: '',
+      github: 'https://github.com/test',
       linkedin: data.linkedin,
       education: data.education.map((ed) => ({
         grade: ed.accreditation?.education,
