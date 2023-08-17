@@ -78,7 +78,7 @@ const postPDF = async (req, res = response) => {
         id: index,
         jobTitle: exp.jobTitle,
         company: exp.organization,
-        location: exp.location?.rawInput,
+        location: exp.location?.rawInput ?? index % 2 === 0 ? 'mexico' : '',
         dates: exp.dates,
         description: exp.jobDescription,
       })),
