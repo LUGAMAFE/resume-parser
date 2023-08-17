@@ -56,7 +56,7 @@ const postPDF = async (req, res = response) => {
     console.log('data', data);
     // console.log('typeofimg', typeof data.headShot);
     const resumeData = {
-      profilePicture: data.headShot,
+      profilePicture: data.headShot ?? '',
       name: data.name.first,
       lastname: data.name.last,
       birthYear: data.dateOfBirth ?? '',
@@ -74,7 +74,8 @@ const postPDF = async (req, res = response) => {
         grade: ed.accreditation?.education,
         institution: ed.organization,
       })),
-      experience: data.workExperience.map((exp) => ({
+      experience: data.workExperience.map((exp, index) => ({
+        id: index,
         jobTitle: exp.jobTitle,
         company: exp.organization,
         location: exp.location?.rawInput,
